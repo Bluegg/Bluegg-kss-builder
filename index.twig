@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ options.title }}</title>
+
+  <meta name="description" content="">
+  <meta name="generator" content="kss-node">
+  <meta name="viewport" content="width=device-width">
+
+  <link rel="stylesheet" href="kss-assets/kss.css">
+  {{ styles|raw }}
+
+</head>
+<body id="kss-node" {% if template.isItem %}class="kss-fullscreen-mode"{% endif %}>
+
+<div class="kss-sidebar kss-style">
+  <header class="kss-header">
+    <a href="/styleguide/" class="kss-logo"><img src="/images/UKLS-logo-white.svg" alt="{{ options.title }}"></a>
+  </header>
+  <nav class="kss-nav">
+    <ul class="kss-nav__menu">
+      <li class="kss-nav__menu-item">
+        <a class="kss-nav__menu-link" href="./">
+          <span class="kss-nav__name">Overview</span>
+        </a>
+      </li>
+    {% for menu_item in menu %}
+      <li class="kss-nav__menu-item">
+        <a class="kss-nav__menu-link {% if menu_item.isActive %}is-active{% endif %}" href="section-{{ menu_item.referenceURI }}.html">
+          <span class="kss-nav__ref">{{ menu_item.referenceNumber }}</span><span class="kss-nav__name">{{ menu_item.header }}</span>
+        </a>
+        {% if menu_item.isActive and menu_item.children is not empty %}
+          <ul class="kss-nav__menu-child">
+          {% for menu_child in menu_item.children %}
+
+            <li class="kss-nav__menu-item {% if menu_child.isGrandChild %}kss-nav__menu-item--child{% endif %}">
+              <a class="kss-nav__menu-link" href="section-{{ menu_item.referenceURI }}.html#kssref-{{ menu_child.referenceURI }}">
+                <span class="kss-nav__ref {% if menu_child.isGrandChild %}kss-nav__ref-child{% endif %}">{{ menu_child.referenceNumber }}</span
+                ><span class="kss-nav__name">{{ menu_child.header }}</span>
+              </a>
+            </li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  </nav>
+</div>
+<article role="main" class="kss-main">
+{% if template.isHomepage %}
+  {% if homepage %}
+    <div id="kssref-0" class="kss-section kss-section--depth-0 kss-overview kss-style">
+      <div class="kss-wrapper copy rte">
+      {{ homepage|raw }}
+      </div>
+    </div>
+  {% endif %}
+{% else %}
+
+  {#
+    Display each section, in order.
+
+    The "root" element comes first in this loop, and can be detected using the
+    "loop.first" variable as seen below.
+  #}
+  {% for section in sections %}
+    {% set sectionElement = loop.first ? 'div' : 'section' %}
+    <{{ sectionElement }} id="kssref-{{ section.referenceURI }}" class="kss-section kss-section--depth-{{ section.depth }} {% if template.isItem %}is-fullscreen{% endif %} {% if section.colors %}kss-section--colors{% endif %} {% if section.logos %}kss-section--logos{% endif %}">
+      <div class="kss-style">
+        {% set headerElement = (section.depth > 6) ? 'h6' : 'h' ~ section.depth %}
+        <{{ headerElement }} class="kss-title kss-title--level-{{ section.depth }}">
+          <a class="kss-title__permalink" href="#kssref-{{ section.referenceURI }}">
+            <span class="kss-title__ref">
+              {{ section.referenceNumber }}
+              <span class="kss-title__permalink-hash">
+                {{ hasNumericReferences ? '#permalink' : section.reference }}
+              </span>
+            </span>
+            {{ section.header }}
+          </a>
+        </{{ headerElement }}>
+
+        {% if section.example %}
+
+        {% endif %}
+
+        {% if section.description %}
+          <div class="kss-description kss-wrapper">
+            {{ section.description|raw }}
+          </div>
+        {% endif %}
+
+        {# section colors #}
+        {% if section.colors %}
+          <div class="kss__colors grid grid--flex grid--tight grid--spaced">
+            {% kssColors section.colors %}
+              <div class="grid__col m-1-2 l-1-3 xl-1-4 xxl-1-6 grid__col--flex">
+                <div class="kss__colors__item">
+                  <div class="kss__colors__demo" style="background-color:{{color.hex}}"></div>
+                  <div class="kss__colors__info">
+                    <h4 class="kss__colors__description">{{ color.description|raw }}</h4>
+                    <p class="kss__colors__value kss__colors__name">{{ color.name }}</p>
+                    <p class="kss__colors__value kss__colors__hex">{{ color.hex }}</p>
+                    <p class="kss__colors__value kss__colors__rgb">rgb({{ color.rgb.r }}, {{ color.rgb.g }}, {{ color.rgb.b }})</p>
+                    <p class="kss__colors__value kss__colors__hsl">hsl({{ color.hsl.h }}, {{ color.hsl.s }}, {{ color.hsl.l }})</p>
+                  </div>
+                </div>
+              </div>
+            {% endkssColors %}
+          </div>
+        {% endif %}
+
+        {# section logos #}
+        {% if section.logos %}
+          <div class="kss-logos grid grid--flex grid--spaced">
+            {% kssLogos section.logos %}
+            <div class="grid__col m-1-2 xxl-1-3 grid__col--flex">
+
+              <div class="kss-logos__item">
+                <div class="kss-logos__info">
+                  <h4>{{ logo.name }}</h4>
+                  <img src="{{ logo.img }}" alt="{{ logo.name }}" class="kss-logos__logo" />
+                  <p>{{ logo.description }}</p>
+                </div>
+
+                <div class="kss-logos__downloads">
+                  <h5>Downloads</h5>
+
+                  <a href="{{ logo.svg }}" rel="noopener" download target="_blank" class="kss-logos__download">Download SVG</a>
+                  <a href="{{ logo.png }}" rel="noopener" download target="_blank" class="kss-logos__download">Download PNG</a>
+                  <a href="{{ logo.jpeg }}" rel="noopener" download target="_blank" class="kss-logos__download">Download JPEG</a>
+                </div>
+              </div>
+
+            </div>
+            {% endkssLogos %}
+          </div>
+        {% endif %}
+
+        {% for parameter in section.parameters %}
+          {% if loop.first %}
+            <div class="kss-parameters__title">Parameters:</div>
+            <ul class="kss-parameters">
+          {% endif %}
+            <li class="kss-parameters__item">
+              <div class="kss-parameters__name"><code>{{ parameter.name }}</code></div>
+              <div class="kss-parameters__description">
+                {{ parameter.description|raw }}
+                {% if parameter.defaultValue %}
+                  <div class="kss-parameters__default-value">
+                    Defaults to: <code>{{ parameter.defaultValue }}</code>
+                  </div>
+                {% endif %}
+              </div>
+            </li>
+          {% if loop.last %}
+            </ul>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if section.example %}
+        <div class="kss-modifier__wrapper">
+          <div class="kss-modifier__heading kss-style">
+            Example{% if section.modifiers is not empty %}s{% endif %}
+          </div>
+
+          {% if section.modifiers is not empty %}
+            <div class="kss-modifier__default-name kss-style">
+              Default styling
+            </div>
+          {% endif %}
+
+          <div class="kss-modifier__example">
+            {{ section.example|raw }}
+            <div class="kss-modifier__example-footer"></div>
+          </div>
+
+          {% for modifier in section.modifiers %}
+            <div class="kss-modifier__name kss-style">
+              {{ modifier.name }}
+            </div>
+            <div class="kss-modifier__description kss-style">
+              {{ modifier.description|raw }}
+            </div>
+            <div class="kss-modifier__example">
+              {{ modifier.markup|raw }}
+              <div class="kss-modifier__example-footer"></div>
+            </div>
+          {% endfor %}
+        </div>
+        {% if section.markup %}
+          <details class="kss-markup kss-style">
+            <summary>
+              {% if section.markupFile %}
+                Markup: <code>{{ section.markupFile }}</code>
+              {% else %}
+                Markup
+              {% endif %}
+            </summary>
+            <pre class="prettyprint linenums lang-html"><code data-language="html">{{ section.markup|escape('html') }}</code></pre>
+
+            {% if section.source.filename %}
+              <div class="kss-source kss-style">
+                Source: <code>{{ section.source.filename }}</code>, line {{ section.source.line }}
+              </div>
+            {% endif %}
+          </details>
+        {% endif %}
+      {% endif %}
+
+      {# section samples #}
+      {% if section.samples %}
+        <div class="kss__samples kss-style">
+          {% kssSamples section.samples %}
+          <div class="kss__samples__item">
+            <h3 class="kss-title kss-title--level-3">{{ sample.title }}</h3>
+
+            <figure class="kss-sample__figure">
+              <img src="{{ sample.img }}" alt="" class="fig__img" />
+
+              <figcaption class="kss-sample__caption">{{ sample.description|raw}}</figcaption>
+            </figure>
+
+
+          </div>
+          {% endkssSamples %}
+        </div>
+      {% endif %}
+
+    </{{ sectionElement }}>
+  {% endfor %}
+{% endif %}
+</article>
+
+<!-- SCRIPTS -->
+<script src="kss-assets/kss.js"></script>
+<script src="kss-assets/scrollspy.js"></script>
+<script src="kss-assets/prettify.js"></script>
+<script src="kss-assets/kss-fullscreen.js"></script>
+<script src="kss-assets/kss-guides.js"></script>
+<script src="kss-assets/kss-markup.js"></script>
+<script>
+  prettyPrint();
+  var spy = new ScrollSpy('#kss-node', {
+    nav: '.kss-nav__menu-child > li > a',
+    className: 'is-in-viewport'
+  });
+  var kssFullScreen = new KssFullScreen({
+    idPrefix: 'kss-fullscreen-',
+    bodyClass: 'kss-fullscreen-mode',
+    elementClass: 'is-fullscreen'
+  });
+  var kssGuides = new KssGuides({
+    bodyClass: 'kss-guides-mode'
+  });
+  var kssMarkup = new KssMarkup({
+    bodyClass: 'kss-markup-mode',
+    detailsClass: 'kss-markup'
+  });
+</script>
+{{ scripts|raw }}
+
+{# This will only be included in the demo page. #}
+{% if options.demo %}
+  <footer class="kss-github">
+    <!-- https://github.com/blog/273-github-ribbons -->
+    <a href="https://github.com/kss-node/kss-node"><img src="kss-assets/github-fork--black.png" alt="Fork me on GitHub"></a>
+  </footer>
+{% endif %}
+
+<!-- Automatically built using <a href="https://github.com/kss-node/kss-node">kss-node</a>. -->
+</body>
+</html>
