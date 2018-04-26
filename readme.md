@@ -2,15 +2,20 @@
 
 This is a KSS builder - a custom build and template - for KSS Style guides.
 
-## How to use
+** DISCLAIMER: This only really works with the Bluegg Generator and as such should not be used by anyone, for anything, at any time **
 
-Pop this into the root directory of your project. Amend the color/font variables
-in `/kss-bluegg-builder/kss-assets/kss.scss` and run Sass by `cd`ing to the
-`kss-bluegg-builder` and running `npm run sass`. The grunt task file for this
-will be in the Bluegg Boilerplate. Just run the `grunt styleguide` task form the
-root directory of your project. Refer to the
-[KSS Node documentation](https://github.com/kss-node/kss-node) or the
-[Grunt KSS Docs](https://github.com/kss-node/grunt-kss) for more info on this.
+## Install
+
+```bash
+npm i bluegg-kss-builder
+```
+
+## Customisation
+
+Amend the color/font variables in `/resources/styles/scss/_styleguide.scss`. 
+
+Then just run the `grunt styleguide` task from the root directory of your project. Refer to the
+[KSS Node documentation](https://github.com/kss-node/kss-node) or the [Grunt KSS Docs](https://github.com/kss-node/grunt-kss) for more info.
 
 ## Custom KSS tasks
 
