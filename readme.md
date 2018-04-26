@@ -2,7 +2,7 @@
 
 This is a KSS builder - a custom build and template - for KSS Style guides.
 
-** DISCLAIMER: This only really works with the Bluegg Generator and as such should not be used by anyone, for anything, at any time **
+**DISCLAIMER: This only really works with the Bluegg Generator and as such should not be used by anyone, for anything, at any time**
 
 ## Install
 
