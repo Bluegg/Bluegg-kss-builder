@@ -1,6 +1,6 @@
 {
   "name": "bluegg-kss-builder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The Bluegg Twig.js builder for kss-node.",
   "main": "builder.js",
   "scripts": {
